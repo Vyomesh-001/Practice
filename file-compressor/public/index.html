@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompressHub - File Compression Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(67, 97, 238, 0.9), rgba(63, 55, 201, 0.9)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .compression-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .compression-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            padding: 1.2rem;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--accent);
+            background-color: rgba(72, 149, 239, 0.05);
+        }
+        
+        .file-upload i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .btn-compress {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .btn-compress:hover {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+        }
+        
+        .progress {
+            height: 8px;
+            margin-top: 1rem;
+        }
+        
+        .result-section {
+            display: none;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .file-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .file-info-item {
+            text-align: center;
+            padding: 0 1rem;
+        }
+        
+        .file-info-item span {
+            display: block;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .download-btn {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-compress-alt me-2"></i>CompressHub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Compress Files Without Losing Quality</h1>
+            <p class="lead mb-5">Reduce file sizes of PDFs, images, and videos quickly and easily with our powerful compression tools</p>
+            <a href="#compression-tools" class="btn btn-light btn-lg px-4 me-2">
+                <i class="fas fa-tools me-2"></i>Try Now
+            </a>
+            <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                <i class="fas fa-info-circle me-2"></i>Learn More
+            </a>
+        </div>
+    </section>
+
+    <!-- Compression Tools -->
+    <section class="container mb-5" id="compression-tools">
+        <div class="row">
+            <!-- PDF Compression -->
+            <div class="col-md-4">
+                <div class="compression-card h-100">
+                    <div class="card-header">
+                        <i class="fas fa-file-pdf me-2"></i>PDF Compression
+                    </div>
+                    <div class="card-body">
+                        <div class="file-upload" id="pdf-upload">
+                            <i class="fas fa-file-upload"></i>
+                            <h5>Upload PDF File</h5>
+                            <p class="text-muted">Drag & drop your file here or click to browse</p>
+                            <input type="file" id="pdf-file" accept=".pdf" style="display: none;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="pdf-quality" class="form-label">Compression Level</label>
+                            <select class="form-select" id="pdf-quality">
+                                <option value="high">High (Smallest size, lower quality)</option>
+                                <option value="medium" selected>Medium (Balanced size/quality)</option>
+                                <option value="low">Low (Larger size, best quality)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-compress w-100" id="compress-pdf">
+                            <i class="fas fa-compress-alt me-2"></i>Compress PDF
+                        </button>
+                        <div class="progress" id="pdf-progress" style="display: none;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="result-section" id="pdf-result">
+                            <div class="file-info">
+                                <div class="file-info-item">
+                                    <span id="pdf-original-size">0 KB</span>
+                                    Original
+                                </div>
+                                <div class="file-info-item">
+                                    <i class="fas fa-arrow-right text-muted"></i>
+                                </div>
+                                <div class="file-info-item">
+                                    <span id="pdf-compressed-size">0 KB</span>
+                                    Compressed
+                                </div>
+                                <div class="file-info-item">
+                                    <span id="pdf-savings">0%</span>
+                                    Savings
+                                </div>
+                            </div>
+                            <button class="btn btn-success download-btn" id="download-pdf">
+                                <i class="fas fa-download me-2"></i>Download Compressed PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Compression -->
+            <div class="col-md-4">
+                <div class="compression-card h-100">
+                    <div class="card-header">
+                        <i class="fas fa-image me-2"></i>Image Compression
+                    </div>
+                    <div class="card-body">
+                        <div class="file-upload" id="image-upload">
+                            <i class="fas fa-file-upload"></i>
+                            <h5>Upload Image</h5>
+                            <p class="text-muted">Drag & drop your file here or click to browse</p>
+                            <input type="file" id="image-file" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="image-quality" class="form-label">Quality (0-100)</label>
+                            <input type="range" class="form-range" min="0" max="100" step="5" id="image-quality" value="70">
+                            <div class="d-flex justify-content-between">
+                                <small>Smaller file</small>
+                                <small>Better quality</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-compress w-100" id="compress-image">
+                            <i class="fas fa-compress-alt me-2"></i>Compress Image
+                        </button>
+                        <div class="progress" id="image-progress" style="display: none;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="result-section" id="image-result">
+                            <div class="file-info">
+                                <div class="file-info-item">
+                                    <span id="image-original-size">0 KB</span>
+                                    Original
+                                </div>
+                                <div class="file-info-item">
+                                    <i class="fas fa-arrow-right text-muted"></i>
+                                </div>
+                                <div class="file-info-item">
+                                    <span id="image-compressed-size">0 KB</span>
+                                    Compressed
+                                </div>
+                                <div class="file-info-item">
+                                    <span id="image-savings">0%</span>
+                                    Savings
+                                </div>
+                            </div>
+                            <button class="btn btn-success download-btn" id="download-image">
+                                <i class="fas fa-download me-2"></i>Download Compressed Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Compression -->
+            <div class="col-md-4">
+                <div class="compression-card h-100">
+                    <div class="card-header">
+                        <i class="fas fa-video me-2"></i>Video Compression
+                    </div>
+                    <div class="card-body">
+                        <div class="file-upload" id="video-upload">
+                            <i class="fas fa-file-upload"></i>
+                            <h5>Upload Video</h5>
+                            <p class="text-muted">Drag & drop your file here or click to browse</p>
+                            <input type="file" id="video-file" accept="video/*" style="display: none;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="video-quality" class="form-label">Compression Level</label>
+                            <select class="form-select" id="video-quality">
+                                <option value="low">Low (720p, larger size)</option>
+                                <option value="medium" selected>Medium (480p, balanced)</option>
+                                <option value="high">High (360p, smallest size)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-compress w-100" id="compress-video">
+                            <i class="fas fa-compress-alt me-2"></i>Compress Video
+                        </button>
+                        <div class="progress" id="video-progress" style="display: none;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="result-section" id="video-result">
+                            <div class="file-info">
+                                <div class="file-info-item">
+                                    <span id="video-original-size">0 KB</span>
+                                    Original
+                                </div>
+                                <div class="file-info-item">
+                                    <i class="fas fa-arrow-right text-muted"></i>
+                                </div>
+                                <div class="file-info-item">
+                                    <span id="video-compressed-size">0 KB</span>
+                                    Compressed
+                                </div>
+                                <div class="file-info-item">
+                                    <span id="video-savings">0%</span>
+                                    Savings
+                                </div>
+                            </div>
+                            <button class="btn btn-success download-btn" id="download-video">
+                                <i class="fas fa-download me-2"></i>Download Compressed Video
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container mb-5 py-5" id="features">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Powerful Compression Features</h2>
+            <p class="lead text-muted">Our tools help you reduce file sizes while maintaining quality</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h4>Fast Processing</h4>
+                    <p class="text-muted">Our optimized algorithms compress your files quickly without long wait times.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Secure Uploads</h4>
+                    <p class="text-muted">Your files are processed securely and deleted automatically after compression.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Quality Control</h4>
+                    <p class="text-muted">Adjustable settings let you balance between file size and quality.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="container mb-5 py-5" id="contact">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="fw-bold mb-4">Have Questions?</h2>
+                <p class="lead">Contact our support team for assistance with our compression tools.</p>
+                <div class="mt-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-envelope me-3 text-primary fs-4"></i>
+                        <span>support@compresshub.com</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-phone me-3 text-primary fs-4"></i>
+                        <span>+91 9005082349</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-map-marker-alt me-3 text-primary fs-4"></i>
+                        <span>Graphic Era Hill University</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Send us a message</h5>
+                        <form>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="fw-bold mb-3">CompressHub</h5>
+                    <p>The ultimate tool for compressing PDFs, images, and videos while maintaining quality.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5 class="fw-bold mb-3">Tools</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white">PDF Compressor</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Image Compressor</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Video Compressor</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5 class="fw-bold mb-3">Company</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white">About Us</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Careers</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Subscribe</h5>
+                    <p>Get the latest updates and news about our tools.</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email">
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 CompressHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Helper function to format file sizes
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i]);
+    }
+
+    // File upload handlers
+    document.getElementById('pdf-upload').addEventListener('click', () => {
+        document.getElementById('pdf-file').click();
+    });
+    
+    document.getElementById('image-upload').addEventListener('click', () => {
+        document.getElementById('image-file').click();
+    });
+    
+    document.getElementById('video-upload').addEventListener('click', () => {
+        document.getElementById('video-file').click();
+    });
+    
+    // Drag and drop functionality
+    function setupDragAndDrop(dropZone, fileInput) {
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#4361ee';
+            dropZone.style.backgroundColor = 'rgba(67, 97, 238, 0.05)';
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#ddd';
+            dropZone.style.backgroundColor = '';
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#ddd';
+            dropZone.style.backgroundColor = '';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                updateFileNameDisplay(dropZone, e.dataTransfer.files[0].name);
+            }
+        });
+    }
+    
+    function updateFileNameDisplay(dropZone, fileName) {
+        const uploadIcon = dropZone.querySelector('i');
+        const uploadText = dropZone.querySelector('h5');
+        const uploadSubtext = dropZone.querySelector('p');
+        
+        uploadIcon.className = 'fas fa-file-alt';
+        uploadText.textContent = fileName;
+        uploadSubtext.textContent = 'Click to change file';
+    }
+    
+    // Initialize drag and drop for all upload zones
+    setupDragAndDrop(document.getElementById('pdf-upload'), document.getElementById('pdf-file'));
+    setupDragAndDrop(document.getElementById('image-upload'), document.getElementById('image-file'));
+    setupDragAndDrop(document.getElementById('video-upload'), document.getElementById('video-file'));
+    
+    // File input change handlers
+    document.getElementById('pdf-file').addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            updateFileNameDisplay(document.getElementById('pdf-upload'), e.target.files[0].name);
+        }
+    });
+    
+    document.getElementById('image-file').addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            updateFileNameDisplay(document.getElementById('image-upload'), e.target.files[0].name);
+        }
+    });
+    
+    document.getElementById('video-file').addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            updateFileNameDisplay(document.getElementById('video-upload'), e.target.files[0].name);
+        }
+    });
+    
+    // Real compression functions with backend connection
+    async function compressFile(type) {
+        const fileInput = document.getElementById(`${type}-file`);
+        const qualityInput = document.getElementById(`${type}-quality`);
+        const progressBar = document.getElementById(`${type}-progress`);
+        const progress = progressBar.querySelector('.progress-bar');
+        const resultSection = document.getElementById(`${type}-result`);
+        
+        if (!fileInput.files.length) {
+            alert(`Please select a ${type.toUpperCase()} file first`);
+            return;
+        }
+        
+        // Show progress bar
+        progressBar.style.display = 'block';
+        progress.style.width = '0%';
+        
+        try {
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('quality', qualityInput.value);
+            
+            // Update progress during upload
+            const xhr = new XMLHttpRequest();
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const percentComplete = (e.loaded / e.total) * 50; // First 50% for upload
+                    progress.style.width = `${percentComplete}%`;
+                }
+            });
+            
+            // Send to backend
+            const response = await fetch(`/api/compress-${type}`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) throw new Error(await response.text());
+            
+            // Simulate processing progress
+            for (let i = 50; i <= 100; i += 5) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                progress.style.width = `${i}%`;
+            }
+            
+            const result = await response.json();
+            
+            // Update UI with real results
+            document.getElementById(`${type}-original-size`).textContent = formatFileSize(result.originalSize);
+            document.getElementById(`${type}-compressed-size`).textContent = formatFileSize(result.compressedSize);
+            document.getElementById(`${type}-savings`).textContent = `${result.savings}%`;
+            resultSection.style.display = 'block';
+            
+            // Set up real download
+            document.getElementById(`download-${type}`).onclick = () => {
+                window.location.href = result.downloadUrl;
+            };
+            
+        } catch (error) {
+            console.error(`Error compressing ${type}:`, error);
+            alert(`Failed to compress ${type}: ${error.message}`);
+        } finally {
+            progressBar.style.display = 'none';
+        }
+    }
+    
+    // Event listeners for compress buttons
+    document.getElementById('compress-pdf').addEventListener('click', () => compressFile('pdf'));
+    document.getElementById('compress-image').addEventListener('click', () => compressFile('image'));
+    document.getElementById('compress-video').addEventListener('click', () => compressFile('video'));
+</script>
+</body>
+</html>
